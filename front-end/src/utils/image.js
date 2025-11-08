@@ -1,6 +1,6 @@
 const isProduction = window.location.hostname !== "localhost";
 const urlBackend = isProduction
-  ? "https://54.166.22.101/"
+  ? "https://cloud-computing-nhom8.onrender.com"
   : "http://localhost:5000/";
 
 export const getImageUrl = (imgPath) => {
