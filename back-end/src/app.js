@@ -4,7 +4,6 @@ const path = require("path");
 const connectDB = require("./config/db");
 const route = require("./routes");
 const homeRouter = require("./routes/homeRoutes");
-const productRouter = require("./routes/productRoutes");
 
 connectDB();
 
@@ -22,7 +21,6 @@ app.use("/public", express.static(path.join(__dirname, "public")));
 // API Routes
 route(app);
 app.use("/api/home", homeRouter);
-app.use("/", productRouter);
 
 // Serve React build
 app.use(express.static(path.join(__dirname, "front-end")));
