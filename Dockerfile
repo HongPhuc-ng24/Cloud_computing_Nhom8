@@ -16,7 +16,7 @@ COPY back-end/ .
 # Final image
 FROM node:20
 WORKDIR /app
-COPY --from=frontend /app/front-end/dist ./front-end
+COPY --from=frontend /app/front-end/build ./front-end
 COPY --from=backend /app/back-end ./back-end
 EXPOSE 5000
 CMD ["node", "back-end/server.js"]
