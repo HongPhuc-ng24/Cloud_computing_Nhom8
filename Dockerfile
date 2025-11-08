@@ -8,15 +8,15 @@ RUN npm run build
 
 # Build backend
 FROM node:20 AS backend
-WORKDIR /app/backend
-COPY backend/package*.json ./
+WORKDIR /app/back-end
+COPY back-end/package*.json ./
 RUN npm install
-COPY backend/ .
+COPY back-end/ .
 
 # Final image
 FROM node:20
 WORKDIR /app
 COPY --from=frontend /app/front-end/dist ./front-end
-COPY --from=backend /app/backend ./
+COPY --from=backend /app/back-end ./back-end
 EXPOSE 5000
-CMD ["node", "server.js"]
+CMD ["node", "back-end/server.js"]
