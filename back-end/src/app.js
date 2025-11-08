@@ -23,10 +23,11 @@ route(app);
 app.use("/api/home", homeRouter);
 
 // Serve React build
-const frontendPath = path.join(__dirname, "../../front-end/build");
+const frontendPath = path.join(__dirname, "../../front-end");
 
 app.use(express.static(frontendPath));
-app.get("/*path", (req, res) => {
+
+app.get("*", (req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
 });
 
