@@ -10,21 +10,30 @@ connectDB();
 
 const app = express();
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// Static folder for product images
-app.use(express.static("public"));
+
+// Static folders
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/public", express.static(path.join(__dirname, "public")));
+
+// API Routes
+route(app);
+app.use("/api/home", homeRouter);
+app.use("/", productRouter);
+
+// Serve React build
 app.use(express.static(path.join(__dirname, "front-end")));
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "front-end", "index.html"));
 });
-// Serve static files (images)
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Routes
-route(app);
+// Error handling middleware (optional)
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: "Server error", error: err.message });
+});
 
-app.use("/api/home", homeRouter);
-app.use("/", productRouter);
 module.exports = app;

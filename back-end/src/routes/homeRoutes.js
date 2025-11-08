@@ -3,6 +3,6 @@ const HomeController = require("../controllers/homeController.js");
 
 const homeRouter = express.Router();
 
-homeRouter.get("/all", HomeController.getAllHomeProduct); // dùng đúng biến homeRouter
+homeRouter.get("/all", HomeController.getAllHomeProduct);
 
 module.exports = homeRouter;
