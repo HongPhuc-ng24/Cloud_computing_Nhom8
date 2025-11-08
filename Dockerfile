@@ -19,4 +19,4 @@ WORKDIR /app
 COPY --from=frontend /app/front-end/build ./front-end
 COPY --from=backend /app/back-end ./back-end
 EXPOSE 5000
-CMD ["node", "back-end/server.js"]
+CMD ["node", "back-end/src/server.js"]
