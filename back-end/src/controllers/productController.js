@@ -38,8 +38,8 @@ class ProductController {
         Img,
         Luotban,
       });
-      await product.save();
 
+      await product.save();
       res.status(201).json(product);
     } catch (error) {
       console.error("Add Product Error:", error);
@@ -53,6 +53,10 @@ class ProductController {
 
       if (req.file) {
         updateData.Img = `/uploads/${req.file.filename}`;
+      } else {
+        if (updateData.Img && typeof updateData.Img === "object") {
+          delete updateData.Img;
+        }
       }
 
       delete updateData._id;
