@@ -1,36 +1,40 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import httpRequest from '../../../utils/httpRequest';
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import httpRequest from "../../../utils/httpRequest";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import "./search.css";
+import { getImageUrl } from "../../../utils/image";
+
 const SearchPage = ({ addtocart }) => {
   const location = useLocation();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // Lấy từ khóa tìm kiếm từ URL
-  const query = new URLSearchParams(location.search).get('keyword');
+  const query = new URLSearchParams(location.search).get("keyword");
 
-useEffect(() => {
-  const fetchProducts = async () => {
-    try {
-      const res = await httpRequest.get(`products/search?search=${query}`);
-      setProducts(res.data);
-    } catch (error) {
-      console.error("Lỗi khi tìm kiếm sản phẩm:", error);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await httpRequest.get(`products/search?search=${query}`);
+        setProducts(res.data);
+      } catch (error) {
+        console.error("Lỗi khi tìm kiếm sản phẩm:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (query) {
+      fetchProducts();
     }
-  };
-
-  if (query) {
-    fetchProducts();
-  }
-}, [query]);
+  }, [query]);
 
   return (
-    <Container className="mt-4 text-center " >
-      <h4>Kết quả tìm kiếm cho: "<strong>{query}</strong>"</h4>
+    <Container className="mt-4 text-center ">
+      <h4>
+        Kết quả tìm kiếm cho: "<strong>{query}</strong>"
+      </h4>
 
       {loading ? (
         <p>Đang tải...</p>
@@ -46,21 +50,24 @@ useEffect(() => {
                     src={getImageUrl(product.Img)}
                     alt={product.Title}
                     style={{
-                      width: '100%',
-                      objectFit: 'cover',
-                      borderRadius: '10px',
+                      width: "100%",
+                      objectFit: "cover",
+                      borderRadius: "10px",
                     }}
                   />
                 </div>
                 <div className="p-3">
                   <h5 className="product-title text-center">{product.Title}</h5>
-                  <p className="product-description" style={{ color: "grey", fontSize: '14px' }}>
+                  <p
+                    className="product-description"
+                    style={{ color: "grey", fontSize: "14px" }}
+                  >
                     Đã bán {product.Luotban} lượt
                   </p>
 
                   <div className="d-flex justify-content-between align-items-center">
                     <h6 className="product-price">
-                      {parseFloat(product.Price).toLocaleString('vi-VN')} VND
+                      {parseFloat(product.Price).toLocaleString("vi-VN")} VND
                     </h6>
 
                     <Button
@@ -72,7 +79,6 @@ useEffect(() => {
                     </Button>
                   </div>
                 </div>
-
               </div>
             </Col>
           ))}

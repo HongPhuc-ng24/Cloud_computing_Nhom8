@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { AiOutlineShoppingCart, AiOutlineHeart, AiOutlineCloseCircle, AiFillStar, } from "react-icons/ai";
+import {
+  AiOutlineShoppingCart,
+  AiOutlineHeart,
+  AiOutlineCloseCircle,
+  AiFillStar,
+} from "react-icons/ai";
 import { BsEye } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
 import "./product.css";
-import httpRequest from '../../../utils/httpRequest';
+import httpRequest from "../../../utils/httpRequest";
+import { getImageUrl } from "../../../utils/image";
 
 const Product = ({ detail, addtocart }) => {
   const [product, setProduct] = useState([]);
@@ -34,23 +40,21 @@ const Product = ({ detail, addtocart }) => {
     navigate(`/product/${product._id}`);
   };
 
-
-
   // Lấy dữ liệu sản phẩm từ API
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const response = await httpRequest.get("products");
-      console.log("Dữ liệu trả về từ API:", response.data);
-      setProduct(response.data);
-      setOriginalProduct(response.data); // Lưu bản gốc để lọc
-    } catch (error) {
-      console.error("Lỗi khi tải sản phẩm:", error);
-    }
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await httpRequest.get("products");
+        console.log("Dữ liệu trả về từ API:", response.data);
+        setProduct(response.data);
+        setOriginalProduct(response.data); // Lưu bản gốc để lọc
+      } catch (error) {
+        console.error("Lỗi khi tải sản phẩm:", error);
+      }
+    };
 
-  fetchData();
-}, []);
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -70,7 +74,7 @@ useEffect(() => {
                     <h4>{curElm.Cat}</h4>
                     <h2>{curElm.Title}</h2>
 
-                    <h3>{curElm.Price.toLocaleString("vi-VN",)} VND</h3>
+                    <h3>{curElm.Price.toLocaleString("vi-VN")} VND</h3>
                     <button onClick={() => addtocart(curElm)}>
                       Add To Cart
                     </button>
@@ -183,7 +187,7 @@ useEffect(() => {
                     <div className="detail">
                       <p>{curElm.Cat}</p>
                       <h3>{curElm.Title}</h3>
-                      <h4>{curElm.Price.toLocaleString("vi-VN",)} VND</h4>
+                      <h4>{curElm.Price.toLocaleString("vi-VN")} VND</h4>
                     </div>
                   </div>
                 );
