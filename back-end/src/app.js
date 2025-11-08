@@ -15,8 +15,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // Static folder for product images
 app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "front-end")));
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.sendFile(path.join(__dirname, "front-end", "index.html"));
 });
 // Serve static files (images)
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));

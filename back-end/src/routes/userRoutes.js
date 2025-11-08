@@ -11,7 +11,7 @@ const router = express.Router();
 router.get("/users", authenticate, authorizeAdmin, UserController.getUsers);
 router.get("/users/:id", authenticate, UserController.getUserById);
 router.patch(
-  "/users/edit/:id/",
+  "/users/edit/:id",
   authenticate,
   authorizeAdmin,
   UserController.edituser
