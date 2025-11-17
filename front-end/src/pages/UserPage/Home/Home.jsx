@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import httpRequest from "../../../utils/httpRequest";
-import { Link } from "react-router-dom";
 import { BsArrowRight } from "react-icons/bs";
 import banner from "../../../assets/box-Banner/background2.avif";
-import './Home.css';
+import "./Home.css";
 import Chatbox from "../../../components/Chatbox/chatbox";
 import { getImageUrl } from "../../../utils/image";
 import { Button, Carousel } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
+
 const Home = ({ addtocart }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   // Lấy dữ liệu sản phẩm từ MongoDB qua API
   useEffect(() => {
@@ -43,7 +45,6 @@ const Home = ({ addtocart }) => {
     }
   }, []);
 
-
   if (loading) {
     return <div className="text-center mt-5">Đang tải dữ liệu...</div>;
   }
@@ -61,13 +62,13 @@ const Home = ({ addtocart }) => {
       btnLink: "/product",
     },
     {
-      img: "https://img.pikbest.com/ai/illus_our/20230427/7aa4e43a48c28685ed3c28d782d41414.jpg!w700wp", // luxury office
+      img: "https://img.pikbest.com/ai/illus_our/20230427/7aa4e43a48c28685ed3c28d782d41414.jpg!sw800", // luxury office
       desc: "Upgrade your home office with premium gadgets.",
       btnText: "Explore",
       btnLink: "/product",
     },
     {
-      img: "https://img.lovepik.com/bg/20240225/Immerse-Yourself-3D-Rendered-Music-App-on-Smartphone-with-Headphones_3698741_wh300.jpg", // luxury device
+      img: "https://img.pikbest.com/wp/202346/pink-pastel-background-featuring-a-3d-rendered-laptop-computer_9633799.jpg!sw800", // luxury device
       desc: "Smartphones, headphones, tablets & more in style.",
       btnText: "Discover",
       btnLink: "/product",
@@ -186,7 +187,8 @@ const Home = ({ addtocart }) => {
                     <Link to={slide.btnLink}>
                       <Button
                         style={{
-                          background: "linear-gradient(90deg, #ff4d6d, #ff007f)",
+                          background:
+                            "linear-gradient(90deg, #ff4d6d, #ff007f)",
                           border: "none",
                           padding: "14px 36px",
                           fontWeight: "600",
@@ -268,15 +270,16 @@ const Home = ({ addtocart }) => {
                         borderRadius: "8px",
                         transition: "all 0.3s",
                       }}
-                      onClick={() => addtocart(product)}
+                      onClick={() => navigate("/product")}
                       onMouseEnter={(e) =>
                         (e.currentTarget.style.background = "#a7e0e5")
                       }
                       onMouseLeave={(e) =>
-                        (e.currentTarget.style.background = "rgb(212, 243, 245)")
+                        (e.currentTarget.style.background =
+                          "rgb(212, 243, 245)")
                       }
                     >
-                      🛒 Add to cart
+                      Shop Now
                     </button>
                   </div>
                 </div>
@@ -298,68 +301,85 @@ const Home = ({ addtocart }) => {
       </div>
       {/* End San pham */}
 
-
       {/* Seller */}
-<div className="container-fluid py-5" style={{ background: "#f5f5f5" }}>
-  <div className="container py-5">
-    {/* Title */}
-    <div className="text-center mb-5">
-      
-    </div>
+      <div className="container-fluid py-5" style={{ background: "#f5f5f5" }}>
+        <div className="container py-5">
+          {/* Title */}
+          <div className="text-center mb-5"></div>
 
-    <div className="row g-4 justify-content-center">
+          <div className="row g-4 justify-content-center">
+            {/* Card 1 - Ipad */}
+            <div className="col-md-6 col-lg-4">
+              <div className="seller-card position-relative overflow-hidden rounded shadow-lg">
+                <img
+                  src="/seller/ipad.jpeg"
+                  className="img-fluid w-100"
+                  alt="Ipad"
+                />
+                <div className="seller-overlay d-flex flex-column justify-content-end p-4">
+                  <h5 className="text-white fw-bold">iPad Gen 10</h5>
+                  <span
+                    className="badge mt-2"
+                    style={{
+                      backgroundColor: "#ff4d6d", // màu hồng
+                      color: "#fff", // chữ trắng
+                      fontWeight: "600",
+                      fontSize: "0.9rem",
+                      padding: "5px 10px",
+                      borderRadius: "12px",
+                    }}
+                  >
+                    Free Delivery
+                  </span>
+                </div>
+              </div>
+            </div>
 
-      {/* Card 1 - Ipad */}
-      <div className="col-md-6 col-lg-4">
-  <div className="seller-card position-relative overflow-hidden rounded shadow-lg">
-    <img src="/seller/ipad.jpeg" className="img-fluid w-100" alt="Ipad" />
-    <div className="seller-overlay d-flex flex-column justify-content-end p-4">
-      <h5 className="text-white fw-bold">iPad Gen 10</h5>
-      <span
-        className="badge mt-2"
-        style={{
-          backgroundColor: "#ff4d6d", // màu hồng
-          color: "#fff",               // chữ trắng
-          fontWeight: "600",
-          fontSize: "0.9rem",
-          padding: "5px 10px",
-          borderRadius: "12px"
-        }}
-      >
-        Free Delivery
-      </span>
-    </div>
-  </div>
-</div>
+            {/* Card 2 - Smart Watch */}
+            <div className="col-md-6 col-lg-4">
+              <div className="seller-card position-relative overflow-hidden rounded shadow-lg">
+                <img
+                  src="/seller/watch.jpg"
+                  className="img-fluid w-100"
+                  alt="Smart Watch"
+                />
+                <div
+                  className="seller-overlay d-flex flex-column justify-content-end p-4"
+                  style={{
+                    background:
+                      "linear-gradient(180deg, transparent, rgba(247,165,118,0.85))",
+                  }}
+                >
+                  <h5 className="text-white fw-bold">Smart Watch</h5>
+                  <span className="badge bg-warning mt-2">Discount 30$</span>
+                </div>
+              </div>
+            </div>
 
-
-      {/* Card 2 - Smart Watch */}
-      <div className="col-md-6 col-lg-4">
-        <div className="seller-card position-relative overflow-hidden rounded shadow-lg">
-          <img src="/seller/watch.jpg" className="img-fluid w-100" alt="Smart Watch" />
-          <div className="seller-overlay d-flex flex-column justify-content-end p-4" style={{ background: "linear-gradient(180deg, transparent, rgba(247,165,118,0.85))" }}>
-            <h5 className="text-white fw-bold">Smart Watch</h5>
-            <span className="badge bg-warning mt-2">Discount 30$</span>
+            {/* Card 3 - Headphones */}
+            <div className="col-md-6 col-lg-4">
+              <div className="seller-card position-relative overflow-hidden rounded shadow-lg">
+                <img
+                  src="/seller/heaphones.jpg"
+                  className="img-fluid w-100"
+                  alt="Headphones"
+                />
+                <div
+                  className="seller-overlay d-flex flex-column justify-content-end p-4"
+                  style={{
+                    background:
+                      "linear-gradient(180deg, transparent, rgba(128,238,142,0.85))",
+                  }}
+                >
+                  <h5 className="text-white fw-bold">Headphones Bluetooth</h5>
+                  <span className="badge bg-success mt-2">10% Discount</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
-      {/* Card 3 - Headphones */}
-      <div className="col-md-6 col-lg-4">
-        <div className="seller-card position-relative overflow-hidden rounded shadow-lg">
-          <img src="/seller/heaphones.jpg" className="img-fluid w-100" alt="Headphones" />
-          <div className="seller-overlay d-flex flex-column justify-content-end p-4" style={{ background: "linear-gradient(180deg, transparent, rgba(128,238,142,0.85))" }}>
-            <h5 className="text-white fw-bold">Headphones Bluetooth</h5>
-            <span className="badge bg-success mt-2">10% Discount</span>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-{/* End Seller */}
-
+      {/* End Seller */}
 
       {/* Banner 2 */}
       <div
@@ -400,7 +420,7 @@ const Home = ({ addtocart }) => {
                 "https://img.pikbest.com/ai/illus_our/20230526/daf2c59f0ddb664241a5c3401dcf4b55.jpg!sw800",
                 "https://img.pikbest.com/wp/202346/cladding-headphone-clad-smartphone-displays-3d-rendered-music-application-against-pink-backdrop_9626996.jpg!bw700",
                 "https://img.pikbest.com/wp/202346/cladding-headphone-clad-smartphone-displaying-3d-rendered-music-app-against-pink-backdrop_9626905.jpg!bw700",
-                "https://png.pngtree.com/thumb_back/fh260/background/20231001/pngtree-d-rendering-of-a-pink-retro-personal-computer-with-system-unit-image_13527391.png",
+                "https://img.pikbest.com/wp/202346/pink-pastel-background-featuring-a-3d-rendered-laptop-computer_9633799.jpg!sw800",
                 "https://image.slidesdocs.com/responsive-images/background/sleek-white-gaming-keyboard-featuring-dynamic-rgb-lights-in-striking-3d-render-powerpoint-background_00277d3707__960_540.jpg",
                 "https://image.slidesdocs.com/responsive-images/background/click-search-information-computer-concept-for-seo-and-web-analytics-on-a-pastel-pink-3d-rendered-illustration-powerpoint-background_5b2dd96804__960_540.jpg",
               ].map((img, index) => (
@@ -442,9 +462,6 @@ const Home = ({ addtocart }) => {
         <Chatbox />
       </div>
       {/* End Banner 2 */}
-
-
-
     </>
   );
 };

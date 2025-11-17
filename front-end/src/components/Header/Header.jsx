@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, Nav, Navbar, Button, Form, FormControl } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+import {
+  Container,
+  Nav,
+  Navbar,
+  Button,
+  Form,
+  FormControl,
+} from "react-bootstrap";
 import { FaHeart, FaShoppingBag, FaUser, FaSearch } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/box-Banner/logo.gif";
@@ -8,11 +15,33 @@ import logo from "../../assets/box-Banner/logo.gif";
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [user, setUser] = useState(null);
+  const [cartCount, setCartCount] = useState(0); // state giỏ hàng
   const navigate = useNavigate();
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) setUser(JSON.parse(storedUser));
+
+    const fetchCartCount = async () => {
+      try {
+        const token = localStorage.getItem("token"); // Lấy token từ localStorage
+
+        const res = await fetch("http://localhost:5000/api/cart", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await res.json();
+
+        // Tính tổng số lượng sản phẩm trong cart
+        setCartCount(data.items?.reduce((total, item) => total + item.qty, 0) || 0);
+      } catch (e) {
+        console.error("Lỗi lấy giỏ hàng:", e);
+      }
+    };
+
+    fetchCartCount();
   }, []);
 
   const handleSearchChange = (e) => setSearchQuery(e.target.value);
@@ -20,22 +49,21 @@ const Header = () => {
     e.preventDefault();
     if (searchQuery.trim()) navigate(`/search?keyword=${searchQuery}`);
   };
+
   const handleLogout = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
     setUser(null);
     navigate("/login");
   };
 
-
-
-
   return (
     <>
-      {/* Header Navbar */}
       <Navbar
         expand="lg"
         style={{
-          background: "linear-gradient(90deg, #ffe5e5 0%, #fbdada 40%, #fff0f0 100%)",
+          background:
+            "linear-gradient(90deg, #ffe5e5 0%, #fbdada 40%, #fff0f0 100%)",
           boxShadow: "0 4px 10px rgba(0,0,0,0.05)",
           padding: "10px 0",
         }}
@@ -49,7 +77,9 @@ const Header = () => {
               height="50"
               className="me-2 rounded-circle shadow-sm"
               style={{ objectFit: "cover", transition: "transform 0.3s ease" }}
-              onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
+              onMouseOver={(e) =>
+                (e.currentTarget.style.transform = "scale(1.1)")
+              }
               onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
             />
             <span
@@ -67,16 +97,53 @@ const Header = () => {
           </Navbar.Brand>
 
           <Navbar.Toggle aria-controls="navbar-nav" />
+
           <Navbar.Collapse id="navbar-nav" className="justify-content-between">
             <Nav className="mx-auto fw-semibold">
-              <Nav.Item><Link to="/" className="nav-link px-3 text-dark hover-link">Home</Link></Nav.Item>
-              <Nav.Item><Link to="/product" className="nav-link px-3 text-dark hover-link">Sản phẩm</Link></Nav.Item>
-              <Nav.Item><Link to="/news" className="nav-link px-3 text-dark hover-link">Tin tức</Link></Nav.Item>
-              <Nav.Item><Link to="/contact" className="nav-link px-3 text-dark hover-link">Liên hệ</Link></Nav.Item>
+              <Nav.Item>
+                <Link to="/" className="nav-link px-3 text-dark hover-link">
+                  Home
+                </Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Link
+                  to="/product"
+                  className="nav-link px-3 text-dark hover-link"
+                >
+                  Sản phẩm
+                </Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Link to="/news" className="nav-link px-3 text-dark hover-link">
+                  Tin tức
+                </Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Link
+                  to="/contact"
+                  className="nav-link px-3 text-dark hover-link"
+                >
+                  Liên hệ
+                </Link>
+              </Nav.Item>
             </Nav>
 
-            <Form onSubmit={handleSearchSubmit} className="me-3 position-relative" style={{ width: "280px" }}>
-              <FaSearch size={16} color="#aaa" style={{ position: "absolute", left: "15px", top: "50%", transform: "translateY(-50%)" }} />
+            {/* SEARCH */}
+            <Form
+              onSubmit={handleSearchSubmit}
+              className="me-3 position-relative"
+              style={{ width: "280px" }}
+            >
+              <FaSearch
+                size={16}
+                color="#aaa"
+                style={{
+                  position: "absolute",
+                  left: "15px",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                }}
+              />
               <FormControl
                 type="text"
                 placeholder="Tìm kiếm sản phẩm..."
@@ -89,49 +156,89 @@ const Header = () => {
                   boxShadow: "0 2px 5px rgba(255, 192, 203, 0.3)",
                   transition: "all 0.3s ease",
                 }}
-                onFocus={(e) => { e.target.style.boxShadow = "0 0 8px rgba(255,100,100,0.5)"; e.target.style.borderColor = "#ff8c9e"; }}
-                onBlur={(e) => { e.target.style.boxShadow = "0 2px 5px rgba(255, 192, 203, 0.3)"; e.target.style.borderColor = "#ffd1d1"; }}
+                onFocus={(e) => {
+                  e.target.style.boxShadow = "0 0 8px rgba(255,100,100,0.5)";
+                  e.target.style.borderColor = "#ff8c9e";
+                }}
+                onBlur={(e) => {
+                  e.target.style.boxShadow =
+                    "0 2px 5px rgba(255, 192, 203, 0.3)";
+                  e.target.style.borderColor = "#ffd1d1";
+                }}
               />
             </Form>
 
+            {/* ICONS */}
             <div className="d-flex align-items-center gap-3">
-              <Link to="/favorites" className="icon-link"><FaHeart size={20} color="#ff4d6d" /></Link>
-              <Link to="/cart" className="icon-link"><FaShoppingBag size={20} color="#28a745" /></Link>
+              <Link to="/favorites" className="icon-link">
+                <FaHeart size={20} color="#ff4d6d" />
+              </Link>
+
+              {/* 🛒 GIỎ HÀNG + BADGE */}
+             {/* 🛒 GIỎ HÀNG + BADGE */}
+<div style={{ position: "relative", display: "inline-block" }}>
+  <Link to="/cart" className="icon-link">
+    <FaShoppingBag size={22} color="#28a745" />
+  </Link>
+
+  {cartCount > 0 && (
+    <span
+      style={{
+        position: "absolute",
+        top: "-6px",
+        right: "-10px",
+        background: "#ff4d6d",
+        color: "#fff",
+        fontSize: "10px",
+        fontWeight: "bold",
+        padding: "3px 6px",
+        borderRadius: "50%",
+        minWidth: "20px",
+        textAlign: "center",
+        boxShadow: "0 0 2px rgba(0,0,0,0.3)",
+        zIndex: 99,
+      }}
+    >
+      {cartCount}
+    </span>
+  )}
+</div>
+
 
               {user ? (
                 <>
-                  <span className="fw-bold text-secondary">{user.username}</span>
-                  <Button variant="outline-danger" size="sm" onClick={handleLogout}>Logout</Button>
+                  <span className="fw-bold text-secondary">
+                    {user.username}
+                  </span>
+                  <Button
+                    variant="outline-danger"
+                    size="sm"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </Button>
                 </>
               ) : (
                 <>
-                  <Link to="/login" className="text-dark"><FaUser size={20} /></Link>
-                  <Link to="/signup"><Button variant="outline-secondary" size="sm">Sign up</Button></Link>
-                  <Link to="/login"><Button variant="danger" size="sm" className="text-white">Sign in</Button></Link>
+                  <Link to="/login" className="text-dark">
+                    <FaUser size={20} />
+                  </Link>
+                  <Link to="/signup">
+                    <Button variant="outline-secondary" size="sm">
+                      Sign up
+                    </Button>
+                  </Link>
+                  <Link to="/login">
+                    <Button variant="danger" size="sm" className="text-white">
+                      Sign in
+                    </Button>
+                  </Link>
                 </>
               )}
             </div>
           </Navbar.Collapse>
         </Container>
-
-        <style>{`
-          .hover-link:hover { color: #ff4d6d !important; text-decoration: underline; }
-          .icon-link:hover svg { transform: scale(1.2); transition: transform 0.2s ease; }
-        `}</style>
       </Navbar>
-
-
-      {/* Hero Carousel dưới Header */}
-
-
-
-
-
-
-
-
-
-
 
     </>
   );
