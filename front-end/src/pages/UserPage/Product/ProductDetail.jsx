@@ -4,9 +4,10 @@ import httpRequest from "../../../utils/httpRequest";
 import { FaShoppingCart, FaStar, FaRegStar } from "react-icons/fa";
 import { getImageUrl } from "../../../utils/image";
 
-const ProductDetail = ({ addtocart }) => {
+const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProductDetail = async () => {
@@ -15,15 +16,35 @@ const ProductDetail = ({ addtocart }) => {
         setProduct(res.data);
       } catch (err) {
         console.error("Lỗi khi tải chi tiết sản phẩm:", err);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchProductDetail();
   }, [id]);
 
-  if (!product) return <p className="text-center mt-5">Đang tải sản phẩm...</p>;
+  if (loading) return <p className="text-center mt-5">Đang tải sản phẩm...</p>;
+  if (!product)
+    return <p className="text-center mt-5">Không tìm thấy sản phẩm.</p>;
 
-  // Hàm render sao đánh giá
+  // ⭐ Hàm thêm vào giỏ hàng – GỌI API TRỰC TIẾP
+  const handleAddToCart = async () => {
+    try {
+      const res = await httpRequest.post("cart", {
+        productId: product._id,
+        qty: 1,
+      });
+
+      console.log("Đã thêm vào giỏ:", res.data);
+      alert("Đã thêm sản phẩm vào giỏ hàng!");
+    } catch (err) {
+      console.error("Lỗi khi thêm vào giỏ:", err);
+      alert("Không thể thêm vào giỏ hàng!");
+    }
+  };
+
+  // ⭐ Render sao đánh giá
   const renderStars = (rating) => {
     const stars = [];
     const maxStars = 5;
@@ -73,21 +94,26 @@ const ProductDetail = ({ addtocart }) => {
               {renderStars(product.rating || 4)}
               <span className="text-muted ms-2">(130 đánh giá)</span>
             </div>
-            <h4> {parseFloat(product.Price).toLocaleString("vi-VN")} VND</h4>
 
+            {/* Giá */}
+            <h4 className="text-danger fw-bold mb-3">
+              {parseFloat(product.Price).toLocaleString("vi-VN")} VND
+            </h4>
+
+            {/* Mô tả */}
             <p className="text-muted mb-3">{product.Description}</p>
 
             {/* Số lượng đã bán */}
             <div className="mb-3">
-              <span className="badge rounded-pill text-dark px-3 py-2">
+              <span className="badge rounded-pill bg-light text-dark px-3 py-2">
                 Đã bán {product.Luotban} lượt
               </span>
             </div>
 
-            {/* Nút thêm vào giỏ hàng */}
+            {/* Nút Thêm vào giỏ */}
             <button
               className="btn btn-success d-flex align-items-center gap-2 px-4 py-2"
-              onClick={() => addtocart(product)}
+              onClick={handleAddToCart}
               style={{ borderRadius: "30px", fontSize: "1rem" }}
             >
               <FaShoppingCart />

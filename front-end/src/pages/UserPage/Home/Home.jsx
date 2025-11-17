@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import httpRequest from "../../../utils/httpRequest";
-import { Link } from "react-router-dom";
 import { BsArrowRight } from "react-icons/bs";
 import banner from "../../../assets/box-Banner/background2.avif";
-import './Home.css';
+import "./Home.css";
 import Chatbox from "../../../components/Chatbox/chatbox";
 import { getImageUrl } from "../../../utils/image";
 import { Button, Carousel } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
+
 const Home = ({ addtocart }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   // Lấy dữ liệu sản phẩm từ MongoDB qua API
   useEffect(() => {
@@ -42,7 +44,6 @@ const Home = ({ addtocart }) => {
       });
     }
   }, []);
-
 
   if (loading) {
     return <div className="text-center mt-5">Đang tải dữ liệu...</div>;
@@ -186,7 +187,8 @@ const Home = ({ addtocart }) => {
                     <Link to={slide.btnLink}>
                       <Button
                         style={{
-                          background: "linear-gradient(90deg, #ff4d6d, #ff007f)",
+                          background:
+                            "linear-gradient(90deg, #ff4d6d, #ff007f)",
                           border: "none",
                           padding: "14px 36px",
                           fontWeight: "600",
@@ -268,15 +270,16 @@ const Home = ({ addtocart }) => {
                         borderRadius: "8px",
                         transition: "all 0.3s",
                       }}
-                      onClick={() => addtocart(product)}
+                      onClick={() => navigate("/product")}
                       onMouseEnter={(e) =>
                         (e.currentTarget.style.background = "#a7e0e5")
                       }
                       onMouseLeave={(e) =>
-                        (e.currentTarget.style.background = "rgb(212, 243, 245)")
+                        (e.currentTarget.style.background =
+                          "rgb(212, 243, 245)")
                       }
                     >
-                      🛒 Add to cart
+                      Shop Now
                     </button>
                   </div>
                 </div>
@@ -298,68 +301,85 @@ const Home = ({ addtocart }) => {
       </div>
       {/* End San pham */}
 
-
       {/* Seller */}
-<div className="container-fluid py-5" style={{ background: "#f5f5f5" }}>
-  <div className="container py-5">
-    {/* Title */}
-    <div className="text-center mb-5">
-      
-    </div>
+      <div className="container-fluid py-5" style={{ background: "#f5f5f5" }}>
+        <div className="container py-5">
+          {/* Title */}
+          <div className="text-center mb-5"></div>
 
-    <div className="row g-4 justify-content-center">
+          <div className="row g-4 justify-content-center">
+            {/* Card 1 - Ipad */}
+            <div className="col-md-6 col-lg-4">
+              <div className="seller-card position-relative overflow-hidden rounded shadow-lg">
+                <img
+                  src="/seller/ipad.jpeg"
+                  className="img-fluid w-100"
+                  alt="Ipad"
+                />
+                <div className="seller-overlay d-flex flex-column justify-content-end p-4">
+                  <h5 className="text-white fw-bold">iPad Gen 10</h5>
+                  <span
+                    className="badge mt-2"
+                    style={{
+                      backgroundColor: "#ff4d6d", // màu hồng
+                      color: "#fff", // chữ trắng
+                      fontWeight: "600",
+                      fontSize: "0.9rem",
+                      padding: "5px 10px",
+                      borderRadius: "12px",
+                    }}
+                  >
+                    Free Delivery
+                  </span>
+                </div>
+              </div>
+            </div>
 
-      {/* Card 1 - Ipad */}
-      <div className="col-md-6 col-lg-4">
-  <div className="seller-card position-relative overflow-hidden rounded shadow-lg">
-    <img src="/seller/ipad.jpeg" className="img-fluid w-100" alt="Ipad" />
-    <div className="seller-overlay d-flex flex-column justify-content-end p-4">
-      <h5 className="text-white fw-bold">iPad Gen 10</h5>
-      <span
-        className="badge mt-2"
-        style={{
-          backgroundColor: "#ff4d6d", // màu hồng
-          color: "#fff",               // chữ trắng
-          fontWeight: "600",
-          fontSize: "0.9rem",
-          padding: "5px 10px",
-          borderRadius: "12px"
-        }}
-      >
-        Free Delivery
-      </span>
-    </div>
-  </div>
-</div>
+            {/* Card 2 - Smart Watch */}
+            <div className="col-md-6 col-lg-4">
+              <div className="seller-card position-relative overflow-hidden rounded shadow-lg">
+                <img
+                  src="/seller/watch.jpg"
+                  className="img-fluid w-100"
+                  alt="Smart Watch"
+                />
+                <div
+                  className="seller-overlay d-flex flex-column justify-content-end p-4"
+                  style={{
+                    background:
+                      "linear-gradient(180deg, transparent, rgba(247,165,118,0.85))",
+                  }}
+                >
+                  <h5 className="text-white fw-bold">Smart Watch</h5>
+                  <span className="badge bg-warning mt-2">Discount 30$</span>
+                </div>
+              </div>
+            </div>
 
-
-      {/* Card 2 - Smart Watch */}
-      <div className="col-md-6 col-lg-4">
-        <div className="seller-card position-relative overflow-hidden rounded shadow-lg">
-          <img src="/seller/watch.jpg" className="img-fluid w-100" alt="Smart Watch" />
-          <div className="seller-overlay d-flex flex-column justify-content-end p-4" style={{ background: "linear-gradient(180deg, transparent, rgba(247,165,118,0.85))" }}>
-            <h5 className="text-white fw-bold">Smart Watch</h5>
-            <span className="badge bg-warning mt-2">Discount 30$</span>
+            {/* Card 3 - Headphones */}
+            <div className="col-md-6 col-lg-4">
+              <div className="seller-card position-relative overflow-hidden rounded shadow-lg">
+                <img
+                  src="/seller/heaphones.jpg"
+                  className="img-fluid w-100"
+                  alt="Headphones"
+                />
+                <div
+                  className="seller-overlay d-flex flex-column justify-content-end p-4"
+                  style={{
+                    background:
+                      "linear-gradient(180deg, transparent, rgba(128,238,142,0.85))",
+                  }}
+                >
+                  <h5 className="text-white fw-bold">Headphones Bluetooth</h5>
+                  <span className="badge bg-success mt-2">10% Discount</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
-      {/* Card 3 - Headphones */}
-      <div className="col-md-6 col-lg-4">
-        <div className="seller-card position-relative overflow-hidden rounded shadow-lg">
-          <img src="/seller/heaphones.jpg" className="img-fluid w-100" alt="Headphones" />
-          <div className="seller-overlay d-flex flex-column justify-content-end p-4" style={{ background: "linear-gradient(180deg, transparent, rgba(128,238,142,0.85))" }}>
-            <h5 className="text-white fw-bold">Headphones Bluetooth</h5>
-            <span className="badge bg-success mt-2">10% Discount</span>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-{/* End Seller */}
-
+      {/* End Seller */}
 
       {/* Banner 2 */}
       <div
@@ -442,9 +462,6 @@ const Home = ({ addtocart }) => {
         <Chatbox />
       </div>
       {/* End Banner 2 */}
-
-
-
     </>
   );
 };
