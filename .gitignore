@@ -18,3 +18,4 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+front-end/src/utils/httpRequest.js

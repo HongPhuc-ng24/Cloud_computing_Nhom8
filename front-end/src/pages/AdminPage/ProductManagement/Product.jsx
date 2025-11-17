@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./Products.module.scss";
 import { getImageUrl } from "../../../utils/image";
 import * as productServices from "../../../services/productServices";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 const AdminProductPage = () => {
     const [products, setProducts] = useState([]);
@@ -19,7 +20,7 @@ const AdminProductPage = () => {
     const fetchProducts = async () => {
         try {
             const data = await productServices.getAllProducts();
-            
+
             setProducts(data);
         } catch (error) {
             console.error("Error fetching products:", error);
@@ -161,18 +162,14 @@ const AdminProductPage = () => {
                                     )}
                                 </td>
                                 <td>
-                                    <button
-                                        className={styles.editBtn}
-                                        onClick={() => handleEdit(product)}
-                                    >
-                                        Edit
+                                    <button className={styles.iconBtn} onClick={() => handleEdit(product)}>
+                                        <FaEdit className={styles.editIcon} />
                                     </button>
-                                    <button
-                                        className={styles.deleteBtn}
-                                        onClick={() => handleDelete(product._id)}
-                                    >
-                                        Delete
+
+                                    <button className={styles.iconBtn} onClick={() => handleDelete(product._id)}>
+                                        <FaTrash className={styles.deleteIcon} />
                                     </button>
+
                                 </td>
                             </tr>
                         ))}
