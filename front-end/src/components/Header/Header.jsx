@@ -11,37 +11,39 @@ import {
 import { FaHeart, FaShoppingBag, FaUser, FaSearch } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/box-Banner/logo.gif";
+import httpRequest from "../../utils/httpRequest";
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [user, setUser] = useState(null);
-  const [cartCount, setCartCount] = useState(0); // state giỏ hàng
+  const [cartCount, setCartCount] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) setUser(JSON.parse(storedUser));
-
-    const fetchCartCount = async () => {
+    const fetchData = async () => {
       try {
-        const token = localStorage.getItem("token"); // Lấy token từ localStorage
+        // Lấy user từ localStorage
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) setUser(JSON.parse(storedUser));
 
-        const res = await fetch("http://localhost:5000/api/cart", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await httpRequest.get("cart");
 
-        const data = await res.json();
+        const data = res.data;
 
-        // Tính tổng số lượng sản phẩm trong cart
-        setCartCount(data.items?.reduce((total, item) => total + item.qty, 0) || 0);
+        // Tính tổng số lượng, bỏ qua item rỗng (product = null)
+        const total =
+          data.items?.reduce((sum, item) => {
+            if (!item.product) return sum;
+            return sum + item.qty;
+          }, 0) || 0;
+
+        setCartCount(total);
       } catch (e) {
         console.error("Lỗi lấy giỏ hàng:", e);
       }
     };
 
-    fetchCartCount();
+    fetchData();
   }, []);
 
   const handleSearchChange = (e) => setSearchQuery(e.target.value);
@@ -175,35 +177,34 @@ const Header = () => {
               </Link>
 
               {/* 🛒 GIỎ HÀNG + BADGE */}
-             {/* 🛒 GIỎ HÀNG + BADGE */}
-<div style={{ position: "relative", display: "inline-block" }}>
-  <Link to="/cart" className="icon-link">
-    <FaShoppingBag size={22} color="#28a745" />
-  </Link>
+              {/* 🛒 GIỎ HÀNG + BADGE */}
+              <div style={{ position: "relative", display: "inline-block" }}>
+                <Link to="/cart" className="icon-link">
+                  <FaShoppingBag size={22} color="#28a745" />
+                </Link>
 
-  {cartCount > 0 && (
-    <span
-      style={{
-        position: "absolute",
-        top: "-6px",
-        right: "-10px",
-        background: "#ff4d6d",
-        color: "#fff",
-        fontSize: "10px",
-        fontWeight: "bold",
-        padding: "3px 6px",
-        borderRadius: "50%",
-        minWidth: "20px",
-        textAlign: "center",
-        boxShadow: "0 0 2px rgba(0,0,0,0.3)",
-        zIndex: 99,
-      }}
-    >
-      {cartCount}
-    </span>
-  )}
-</div>
-
+                {cartCount > 0 && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: "-6px",
+                      right: "-10px",
+                      background: "#ff4d6d",
+                      color: "#fff",
+                      fontSize: "10px",
+                      fontWeight: "bold",
+                      padding: "3px 6px",
+                      borderRadius: "50%",
+                      minWidth: "20px",
+                      textAlign: "center",
+                      boxShadow: "0 0 2px rgba(0,0,0,0.3)",
+                      zIndex: 99,
+                    }}
+                  >
+                    {cartCount}
+                  </span>
+                )}
+              </div>
 
               {user ? (
                 <>
@@ -239,7 +240,6 @@ const Header = () => {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-
     </>
   );
 };

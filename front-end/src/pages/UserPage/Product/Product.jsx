@@ -18,13 +18,10 @@ const Product = () => {
   const [comments, setComments] = useState([]);
   const [close, setClose] = useState(false);
 
-  const [showToast, setShowToast] = useState(false); // 👉 thêm state toast
+  const [showToast, setShowToast] = useState(false); 
 
   const navigate = useNavigate();
 
-  // =====================
-  // 👉 ADD TO CART (Có Toast)
-  // =====================
   const handleAddToCart = async (item) => {
     try {
       await httpRequest.post("cart", {
