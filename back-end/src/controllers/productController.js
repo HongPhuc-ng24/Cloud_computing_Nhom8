@@ -27,7 +27,7 @@ class ProductController {
 
   async addProduct(req, res) {
     try {
-      const { Title, Cat, Price, Description, Luotban } = req.body;
+      const { Title, Cat, Price, Description } = req.body;
       const Img = req.file ? `/uploads/${req.file.filename}` : "";
 
       const product = new Product({
@@ -36,7 +36,6 @@ class ProductController {
         Price,
         Description,
         Img,
-        Luotban,
       });
       await product.save();
       res.status(201).json(product);
