@@ -100,7 +100,12 @@ const Cart = ({ setCart }) => {
   const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const handlePayOnDelivery = async () => {
-    if (!userInfo.name || !userInfo.address || !userInfo.phone || !userInfo.email) {
+    if (
+      !userInfo.name ||
+      !userInfo.address ||
+      !userInfo.phone ||
+      !userInfo.email
+    ) {
       setError("Vui lòng điền đầy đủ thông tin!");
       return;
     }
@@ -130,7 +135,6 @@ const Cart = ({ setCart }) => {
       // Hiển thị toast thành công
       setShowToast(true);
       setTimeout(() => setShowToast(false), 3000);
-
     } catch (err) {
       console.error("Lỗi khi thanh toán:", err);
       setError("Thanh toán thất bại, vui lòng thử lại!");
@@ -140,6 +144,9 @@ const Cart = ({ setCart }) => {
   return (
     <>
       <div className="cart-wrapper">
+        {validCart.length === 0 && (
+          <p className="empty-cart">Không có sản phẩm trong giỏ hàng</p>
+        )}
         {validCart.map((curElm) => {
           const selected = selectedProducts.includes(curElm.product._id);
           return (
@@ -160,17 +167,38 @@ const Cart = ({ setCart }) => {
               <div className="cart-middle">
                 <h4 className="cart-category">{curElm.product.Cat}</h4>
                 <h3 className="cart-title">{curElm.product.Title}</h3>
-                <p className="cart-price">{curElm.product.Price.toLocaleString()} VND</p>
+                <p className="cart-price">
+                  {curElm.product.Price.toLocaleString()} VND
+                </p>
                 <div className="cart-qty">
-                  <button onClick={() => incqty(curElm.product._id)} className="qty-btn">+</button>
-                  <input type="text" readOnly value={curElm.qty} className="qty-input" />
-                  <button onClick={() => decqty(curElm.product._id)} className="qty-btn">-</button>
+                  <button
+                    onClick={() => incqty(curElm.product._id)}
+                    className="qty-btn"
+                  >
+                    +
+                  </button>
+                  <input
+                    type="text"
+                    readOnly
+                    value={curElm.qty}
+                    className="qty-input"
+                  />
+                  <button
+                    onClick={() => decqty(curElm.product._id)}
+                    className="qty-btn"
+                  >
+                    -
+                  </button>
                 </div>
                 <h4 className="cart-subtotal">
-                  Tạm tính: {(curElm.qty * curElm.product.Price).toLocaleString()} VND
+                  Tạm tính:{" "}
+                  {(curElm.qty * curElm.product.Price).toLocaleString()} VND
                 </h4>
               </div>
-              <button className="remove-btn" onClick={() => removeProduct(curElm.product._id)}>
+              <button
+                className="remove-btn"
+                onClick={() => removeProduct(curElm.product._id)}
+              >
                 <AiOutlineClose />
               </button>
             </div>
@@ -193,28 +221,54 @@ const Cart = ({ setCart }) => {
           <div className="payment-box">
             <h2>Đặt Hàng</h2>
             <div className="pay-on-delivery-info">
-              <label style={{color: "#000", fontWeight: "bold"}}>Tên:</label>
-              <input type="text" name="name" value={userInfo.name} onChange={handleInputChange} />
-              <label style={{color: "#000", fontWeight: "bold"}}>Địa chỉ:</label>
-              <input type="text" name="address" value={userInfo.address} onChange={handleInputChange} />
-              <label style={{color: "#000", fontWeight: "bold"}}>Số điện thoại:</label>
-              <input type="tel" name="phone" value={userInfo.phone} onChange={handleInputChange} />
-              <label style={{color: "#000", fontWeight: "bold"}}>Email:</label>
-              <input type="email" name="email" value={userInfo.email} onChange={handleInputChange} />
+              <label style={{ color: "#000", fontWeight: "bold" }}>Tên:</label>
+              <input
+                type="text"
+                name="name"
+                value={userInfo.name}
+                onChange={handleInputChange}
+              />
+              <label style={{ color: "#000", fontWeight: "bold" }}>
+                Địa chỉ:
+              </label>
+              <input
+                type="text"
+                name="address"
+                value={userInfo.address}
+                onChange={handleInputChange}
+              />
+              <label style={{ color: "#000", fontWeight: "bold" }}>
+                Số điện thoại:
+              </label>
+              <input
+                type="tel"
+                name="phone"
+                value={userInfo.phone}
+                onChange={handleInputChange}
+              />
+              <label style={{ color: "#000", fontWeight: "bold" }}>
+                Email:
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={userInfo.email}
+                onChange={handleInputChange}
+              />
               <p className="error-text">{error}</p>
               <button id="payOnDelivery" onClick={handlePayOnDelivery}>
                 Thanh toán {totalSelected.toLocaleString()} VND
               </button>
-              <button id="goBack" onClick={() => setShowPaymentModal(false)}>Quay lại</button>
+              <button id="goBack" onClick={() => setShowPaymentModal(false)}>
+                Quay lại
+              </button>
             </div>
           </div>
         </div>
       )}
 
       {/* Toast hiển thị trên cùng */}
-      {showToast && (
-        <div className="toast">Thanh toán thành công!</div>
-      )}
+      {showToast && <div className="toast">Thanh toán thành công!</div>}
     </>
   );
 };
