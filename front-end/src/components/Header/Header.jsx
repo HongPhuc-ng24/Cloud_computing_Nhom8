@@ -36,42 +36,41 @@ const Header = () => {
       console.error("Lỗi lấy giỏ hàng:", e);
     }
   };
-useEffect(() => {
-  const storedUser = localStorage.getItem("user");
-  if (storedUser) setUser(JSON.parse(storedUser));
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) setUser(JSON.parse(storedUser));
 
-  // Lấy cart lần đầu
-  const fetchCartCount = async () => {
-    try {
-      const res = await httpRequest.get("cart");
-      const total = res.data.items?.reduce(
-        (sum, item) => (item.product ? sum + item.qty : sum),
-        0
-      ) || 0;
-      setCartCount(total);
-    } catch (e) {
-      console.error(e);
-      setCartCount(0);
-    }
-  };
-  fetchCartCount();
+    // Lấy cart lần đầu
+    const fetchCartCount = async () => {
+      try {
+        const res = await httpRequest.get("cart");
+        const total =
+          res.data.items?.reduce(
+            (sum, item) => (item.product ? sum + item.qty : sum),
+            0
+          ) || 0;
+        setCartCount(total);
+      } catch (e) {
+        console.error(e);
+        setCartCount(0);
+      }
+    };
+    fetchCartCount();
 
-  // Lắng nghe event cập nhật cart
-  const handleCartUpdate = (e) => {
-    if (e.detail !== undefined) {
-      setCartCount(e.detail); // nếu có gửi tổng số lượng
-    } else {
-      // Nếu không gửi tổng số lượng, fetch lại cart
-      fetchCartCount();
-    }
-  };
+    // Lắng nghe event cập nhật cart
+    const handleCartUpdate = (e) => {
+      if (e.detail !== undefined) {
+        setCartCount(e.detail); // nếu có gửi tổng số lượng
+      } else {
+        // Nếu không gửi tổng số lượng, fetch lại cart
+        fetchCartCount();
+      }
+    };
 
-  window.addEventListener("cartUpdated", handleCartUpdate);
+    window.addEventListener("cartUpdated", handleCartUpdate);
 
-  return () => window.removeEventListener("cartUpdated", handleCartUpdate);
-}, []);
-
-
+    return () => window.removeEventListener("cartUpdated", handleCartUpdate);
+  }, []);
 
   const handleSearchChange = (e) => setSearchQuery(e.target.value);
 
@@ -122,7 +121,7 @@ useEffect(() => {
                 textShadow: "0 1px 2px rgba(0,0,0,0.1)",
               }}
             >
-              TECHNOLOGY SHOP
+              Nhóm 8
             </span>
           </Navbar.Brand>
 
